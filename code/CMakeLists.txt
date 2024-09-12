@@ -919,6 +919,8 @@ if ((MINGW) AND (CMAKE_BUILD_TYPE MATCHES Debug))
 endif()
 
 if ((NOT ASSIMP_NO_EXPORT) OR (NOT ASSIMP_EXPORTERS_ENABLED STREQUAL ""))
+## REVIEW: Exporter.h is included always but none of the explicit exporters fulfill need for source, results in 
+## compiler error when attempting to include Exporter.h
 	SET( Exporter_SRCS
 	  Common/Exporter.cpp
 	  CApi/AssimpCExport.cpp
