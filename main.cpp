@@ -21,6 +21,20 @@
 #include <vector>
 #include <string>
 
+struct MeshData {
+    std::string name;
+    float distance;
+    aiVector3D startPoint;
+    aiVector3D endPoint;
+    aiVector3D refPoint;
+    bool useFaceNormals;
+    bool useTangentBasis;
+    std::vector<aiVector3D> vertices;
+    std::vector<aiVector3D> normals;
+    std::vector<aiVector3D> uvs;
+    std::vector<unsigned int> indices;
+    std::string texturePath;  // Add texture path here
+};
 
 struct Bone {
     std::string name;
