@@ -362,6 +362,9 @@
 		E23DBA1ED54F47F3B187C224 /* NDOLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27CA44251A2A46BDBB033BC7 /* NDOLoader.cpp */; };
 		E29344662C8F89FC00C62A70 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29344652C8F89FC00C62A70 /* main.cpp */; };
 		E293446E2C92884A00C62A70 /* libassimpd.5.4.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 606E06C1722B450C84CD8517 /* libassimpd.5.4.1.dylib */; };
+		E29344712C9520BE00C62A70 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E293446F2C9520BE00C62A70 /* Utils.cpp */; };
+		E29344742C962F7600C62A70 /* asfamc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29344722C962F7600C62A70 /* asfamc.cpp */; };
+		E29344772C963CE900C62A70 /* Converter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29344752C963CE900C62A70 /* Converter.cpp */; };
 		E2ABF0B511D14BAA9F8CB229 /* utBase64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3B3B93EB717479D998883CB /* utBase64.cpp */; };
 		E3E94136180D427197480A16 /* AssbinFileWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C26FB7FF2CBA4E1AAFBB737D /* AssbinFileWriter.cpp */; };
 		E51856854DB44F5F8377AA73 /* utSortByPType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8031B63856A34561A8854000 /* utSortByPType.cpp */; };
@@ -1102,6 +1105,12 @@
 		E2728198B0C74DAEA300715F /* MMDPmxParser.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MMDPmxParser.h; path = code/AssetLib/MMD/MMDPmxParser.h; sourceTree = SOURCE_ROOT; };
 		E29344632C8F89FC00C62A70 /* asfamc_to_fbx */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = asfamc_to_fbx; sourceTree = BUILT_PRODUCTS_DIR; };
 		E29344652C8F89FC00C62A70 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E293446F2C9520BE00C62A70 /* Utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
+		E29344702C9520BE00C62A70 /* Utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
+		E29344722C962F7600C62A70 /* asfamc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = asfamc.cpp; sourceTree = "<group>"; };
+		E29344732C962F7600C62A70 /* asfamc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = asfamc.hpp; sourceTree = "<group>"; };
+		E29344752C963CE900C62A70 /* Converter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Converter.cpp; sourceTree = "<group>"; };
+		E29344762C963CE900C62A70 /* Converter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Converter.hpp; sourceTree = "<group>"; };
 		E2FBD022078C4A93997603B6 /* BlenderBMesh.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BlenderBMesh.cpp; path = code/AssetLib/Blender/BlenderBMesh.cpp; sourceTree = SOURCE_ROOT; };
 		E33F5BFF7D884118A68F219C /* IQMImporter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IQMImporter.h; path = code/AssetLib/IQM/IQMImporter.h; sourceTree = SOURCE_ROOT; };
 		E3730092582846E58ED83BD2 /* postprocess.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = postprocess.h; path = include/assimp/postprocess.h; sourceTree = SOURCE_ROOT; };
@@ -2515,6 +2524,12 @@
 			isa = PBXGroup;
 			children = (
 				E29344652C8F89FC00C62A70 /* main.cpp */,
+				E293446F2C9520BE00C62A70 /* Utils.cpp */,
+				E29344702C9520BE00C62A70 /* Utils.hpp */,
+				E29344722C962F7600C62A70 /* asfamc.cpp */,
+				E29344732C962F7600C62A70 /* asfamc.hpp */,
+				E29344752C963CE900C62A70 /* Converter.cpp */,
+				E29344762C963CE900C62A70 /* Converter.hpp */,
 			);
 			path = asfamc_to_fbx;
 			sourceTree = "<group>";
@@ -3192,6 +3207,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E29344662C8F89FC00C62A70 /* main.cpp in Sources */,
+				E29344742C962F7600C62A70 /* asfamc.cpp in Sources */,
+				E29344772C963CE900C62A70 /* Converter.cpp in Sources */,
+				E29344712C9520BE00C62A70 /* Utils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
