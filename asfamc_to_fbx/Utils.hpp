@@ -23,4 +23,7 @@ std::vector<std::string> get_files_in_directory(const std::string& directory_pat
 // Function to get file name from path (excluding extension)
 std::string get_file_name(const std::string& file_path);
 
+// Function to get file name from path (excluding extension)
+std::string get_file_name_with_extension(const std::string& file_path);
+
 #endif /* Utils_hpp */

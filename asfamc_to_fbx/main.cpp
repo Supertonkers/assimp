@@ -104,7 +104,14 @@
 //}
 
 int main() {
+    // WOrking direcotry
+    //"/Users/tom/work/asfamc_to_fbx/assimp/build/Debug"
+//    std::filesystem::path currentPath = std::filesystem::current_path();
+//        std::cout << "Current working directory: " << currentPath << std::endl;
+//        return 0;
+    
     Converter converter;
+    
     
     return converter.Convert();
     

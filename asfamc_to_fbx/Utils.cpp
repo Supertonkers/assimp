@@ -60,3 +60,8 @@ std::string get_file_name(const std::string& file_path) {
     fs::path path(file_path);
     return path.stem().string();  // stem() returns the filename without extension
 }
+
+std::string get_file_name_with_extension(const std::string& file_path) {
+    fs::path path(file_path);
+    return path.filename();  // stem() returns the filename without extension
+}

@@ -18,17 +18,33 @@
 #include "postprocess.h"
 #include "Utils.hpp"
 #include "asfamc.hpp"
+
+void func() {
+    
+}
+
+void Converter::init() {
+    meshPaths = get_files_in_directory(ASSETS_MESH);
+    motionPaths = get_files_in_directory(ASSETS_MOTION);
+    renderPaths = get_files_in_directory(ASSETS_RENDER);
+    skeletonPaths = get_files_in_directory(ASSETS_SKELETON);
+    texturePaths = get_files_in_directory(ASSETS_TEXTURE);
+}
     
 int Converter::Convert() {
+    init();
+    
     // Initialize Assimp structures
     aiScene* scene = new aiScene();
     scene->mRootNode = new aiNode();
     scene->mRootNode->mName = aiString("Root");
+    
+    auto meshPath = meshPaths[13];
 
     // Example JSON strings for skeleton, motion, and mesh data (Replace with actual JSON input)
-    std::string skeletonJsonString = R"(...)"; // Skeleton JSON here
-    std::string motionJsonString = R"(...)"; // Motion JSON here
-    std::string meshJsonString = R"(...)"; // Mesh JSON here
+    std::string skeletonJsonString = parse_json_file_to_string(skeletonPaths[0]); // Skeleton JSON here
+    std::string motionJsonString = parse_json_file_to_string(motionPaths[0]); // Motion JSON here
+    std::string meshJsonString = parse_json_file_to_string(meshPath); // Mesh JSON here
 
     // Parse the JSON
     auto skeleton_json = nlohmann::json::parse(skeletonJsonString);
@@ -39,13 +55,16 @@ int Converter::Convert() {
     asf::Bone rootBone = asf::ParseBone(skeleton_json["skeleton_root"]);
     amc::MotionData motionData = amc::ParseMotionData(motion_json);
     mesh::MeshData meshData = mesh::ParseMeshData(mesh_json);
+    
+    // TODO: Assign texture path to mesh.
+    meshData.texturePath = get_file_name_with_extension(texturePaths[0]);
 
     // Create the skeleton root node and attach to the root node of the scene
     aiNode* skeletonNode = CreateAiSkeletonNode(rootBone);
     scene->mRootNode->addChildren(1, &skeletonNode);
 
     // Add animation data to the scene
-    AddAnimationToAiScene(scene, scene->mRootNode, motionData);
+    AddAnimationToAiScene(scene, scene->mRootNode, motionData, meshData);
 
     // Create and attach the mesh to the scene
     scene->mNumMeshes = 1;
@@ -60,9 +79,18 @@ int Converter::Convert() {
     meshNode->mNumMeshes = 1;
     scene->mRootNode->addChildren(1, &meshNode);
 
+    // Create material with the texture and assign it to the mesh
+    scene->mNumMaterials = 1;
+    scene->mMaterials = new aiMaterial*[scene->mNumMaterials];
+    scene->mMaterials[0] = CreateAiMaterial(meshData.texturePath);
+
+    // Link the mesh to the material
+    scene->mMeshes[0]->mMaterialIndex = 0;
+
     // Export the scene to an FBX file using Assimp
     Assimp::Exporter exporter;
-    if (exporter.Export(scene, "fbx", "output.fbx") != AI_SUCCESS) {
+    auto outputPath = get_file_name(meshPath) + ".fbx";
+    if (exporter.Export(scene, "fbx", outputPath) != AI_SUCCESS) {
         std::cerr << "Error exporting FBX: " << exporter.GetErrorString() << std::endl;
         return -1;
     }
@@ -72,25 +100,7 @@ int Converter::Convert() {
     return 0;
 }
 
-aiNode* Converter::CreateAiSkeletonNode(const asf::Bone& bone) {
-    aiNode* node = new aiNode();
-    node->mName = aiString(bone.name);
-    node->mTransformation = aiMatrix4x4(
-        aiVector3D(1.0f, 1.0f, 1.0f),
-        aiQuaternion(bone.orientation.x, bone.orientation.y, bone.orientation.z, bone.orientation.w),
-        aiVector3D(bone.position.x, bone.position.y, bone.position.z)
-    );
-
-    node->mNumChildren = bone.children.size();
-    node->mChildren = new aiNode*[node->mNumChildren];
-    for (size_t i = 0; i < node->mNumChildren; ++i) {
-        node->mChildren[i] = CreateAiSkeletonNode(bone.children[i]);
-    }
-
-    return node;
-}
-
-void Converter::AddAnimationToAiScene(aiScene* scene, aiNode* rootNode, const amc::MotionData& motionData) {
+void Converter::AddAnimationToAiScene(aiScene* scene, aiNode* rootNode, const amc::MotionData& motionData, const mesh::MeshData& meshData) {
     aiAnimation* anim = new aiAnimation();
     anim->mName = aiString("MotionAnimation");
     anim->mDuration = motionData.smoothing.size();
@@ -129,6 +139,24 @@ void Converter::AddAnimationToAiScene(aiScene* scene, aiNode* rootNode, const am
     scene->mAnimations[0] = anim;
 }
 
+aiNode* Converter::CreateAiSkeletonNode(const asf::Bone& bone) {
+    aiNode* node = new aiNode();
+    node->mName = aiString(bone.name);
+    node->mTransformation = aiMatrix4x4(
+        aiVector3D(1.0f, 1.0f, 1.0f),
+        aiQuaternion(bone.orientation.x, bone.orientation.y, bone.orientation.z, bone.orientation.w),
+        aiVector3D(bone.position.x, bone.position.y, bone.position.z)
+    );
+
+    node->mNumChildren = bone.children.size();
+    node->mChildren = new aiNode*[node->mNumChildren];
+    for (size_t i = 0; i < node->mNumChildren; ++i) {
+        node->mChildren[i] = CreateAiSkeletonNode(bone.children[i]);
+    }
+
+    return node;
+}
+
 aiMesh* Converter::CreateAiMesh(const mesh::MeshData& meshData) {
     aiMesh* mesh = new aiMesh();
     mesh->mNumVertices = meshData.vertices.size();
@@ -155,4 +183,14 @@ aiMesh* Converter::CreateAiMesh(const mesh::MeshData& meshData) {
     }
 
     return mesh;
+}
+
+aiMaterial* Converter::CreateAiMaterial(const std::string& texturePath) {
+    aiMaterial* material = new aiMaterial();
+    
+    // Load the texture
+    aiString path(texturePath);
+    material->AddProperty(&path, AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0));
+
+    return material;
 }

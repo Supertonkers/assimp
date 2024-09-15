@@ -26,6 +26,9 @@ struct MeshData {
     std::vector<aiVector3D> normals;
     std::vector<aiVector3D> uvs;
     std::vector<unsigned int> indices;
+    /**
+     Field is overwritten, not privded in actual data.*/
+    std::string texturePath;  // Add texture path here
 };
 
 MeshData ParseMeshData(const nlohmann::json& mesh_json);
