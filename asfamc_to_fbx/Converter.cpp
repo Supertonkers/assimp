@@ -39,7 +39,7 @@ int Converter::Convert() {
     scene->mRootNode = new aiNode();
     scene->mRootNode->mName = aiString("Root");
     
-    auto meshPath = meshPaths[13];
+    auto meshPath = meshPaths[13].find();
 
     // Example JSON strings for skeleton, motion, and mesh data (Replace with actual JSON input)
     std::string skeletonJsonString = parse_json_file_to_string(skeletonPaths[0]); // Skeleton JSON here
@@ -57,14 +57,16 @@ int Converter::Convert() {
     mesh::MeshData meshData = mesh::ParseMeshData(mesh_json);
     
     // TODO: Assign texture path to mesh.
-    meshData.texturePath = get_file_name_with_extension(texturePaths[0]);
+    meshData.texturePath = "800005.tga"
+    //meshData.texturePath = get_file_name_with_extension(texturePaths[6]);
+    //meshData.texturePath = get_file_name_with_extension(texturePaths[5]);
 
     // Create the skeleton root node and attach to the root node of the scene
     aiNode* skeletonNode = CreateAiSkeletonNode(rootBone);
     scene->mRootNode->addChildren(1, &skeletonNode);
 
     // Add animation data to the scene
-    AddAnimationToAiScene(scene, scene->mRootNode, motionData, meshData);
+    AddAnimationToAiScene(scene, scene->mRootNode, motionData);
 
     // Create and attach the mesh to the scene
     scene->mNumMeshes = 1;
@@ -89,8 +91,8 @@ int Converter::Convert() {
 
     // Export the scene to an FBX file using Assimp
     Assimp::Exporter exporter;
-    auto outputPath = get_file_name(meshPath) + ".fbx";
-    if (exporter.Export(scene, "fbx", outputPath) != AI_SUCCESS) {
+    auto outputPath = get_file_name(meshPath) + ".obj";
+    if (exporter.Export(scene, "obj", outputPath) != AI_SUCCESS) {
         std::cerr << "Error exporting FBX: " << exporter.GetErrorString() << std::endl;
         return -1;
     }
@@ -100,7 +102,7 @@ int Converter::Convert() {
     return 0;
 }
 
-void Converter::AddAnimationToAiScene(aiScene* scene, aiNode* rootNode, const amc::MotionData& motionData, const mesh::MeshData& meshData) {
+void Converter::AddAnimationToAiScene(aiScene* scene, aiNode* rootNode, const amc::MotionData& motionData) {
     aiAnimation* anim = new aiAnimation();
     anim->mName = aiString("MotionAnimation");
     anim->mDuration = motionData.smoothing.size();

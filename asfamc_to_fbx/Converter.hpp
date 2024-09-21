@@ -27,7 +27,7 @@ private:
     
     aiNode* CreateAiSkeletonNode(const asf::Bone& bone);
     
-    void AddAnimationToAiScene(aiScene* scene, aiNode* rootNode, const amc::MotionData& motionData, const mesh::MeshData& meshData);
+    void AddAnimationToAiScene(aiScene* scene, aiNode* rootNode, const amc::MotionData& motionData);
     
     
     const std::string ASSETS = "../../../assets/test/";
